@@ -1,0 +1,6 @@
+{
+  "quoteProps": "preserve",
+  "singleQuote": true,
+  "trailingComma": "none",
+  "maxLineLength": 130
+}
