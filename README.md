@@ -1,6 +1,6 @@
 # Country
 
-Is an Angular client that provides a reactive service based on Spring Boot WebFlux.
+Is an Angular client that uses a reactive service (non-blocking http and database access) based on Spring Boot WebFlux and R2DBC.
 The Angular feature of the standalone components is also implemented.
 
 ## Prerequisites
