@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +12,5 @@ export class AppComponent {
   public title = 'country';
   public countriesView = true;
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router
-  ) {}
+  constructor() {}
 }

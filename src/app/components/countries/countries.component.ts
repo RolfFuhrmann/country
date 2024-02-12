@@ -1,5 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
@@ -8,6 +14,7 @@ import {
   MatTableModule
 } from '@angular/material/table';
 import { Country } from '../../model/country';
+import { CountryPushService } from '../../services/country-push.service';
 import { CountryService } from '../../services/country.service';
 import { AddButtonComponent } from '../buttons/add-button/add-button.component';
 import { CountryHeaderComponent } from '../country-header/county-header.component';
@@ -23,7 +30,7 @@ import { CountryHeaderComponent } from '../country-header/county-header.componen
   ],
   templateUrl: './countries.component.html'
 })
-export class CountriesComponent implements OnInit {
+export class CountriesComponent implements OnInit, OnDestroy {
   public displayColumns: string[] = ['name', 'continent', 'actions'];
   public countriesTableSource = new MatTableDataSource<Country>([]);
 
@@ -32,10 +39,24 @@ export class CountriesComponent implements OnInit {
   constructor(
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly countryService: CountryService,
+    private readonly countryPushService: CountryPushService,
     private snackBar: MatSnackBar
   ) {}
 
+  public ngOnDestroy(): void {
+    this.countryPushService.connectToPuschService().unsubscribe;
+  }
+
   public ngOnInit() {
+    this.countryPushService.connectToPuschService().subscribe({
+      next: () => {
+        this.countriesTableSource = new MatTableDataSource<Country>([]);
+        this.loadCountries();
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
     this.loadCountries();
   }
 

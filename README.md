@@ -12,3 +12,8 @@ The service [CountryDbAccessService](https://github.com/RolfFuhrmann/country-db-
 See scripts in package.json
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Further Information
+
+https://www.toptal.com/java/stomp-spring-boot-websocket
+https://docs.spring.io/spring-framework/docs/4.3.x/spring-framework-reference/html/websocket.html
