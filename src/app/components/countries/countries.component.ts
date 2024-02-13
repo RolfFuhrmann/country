@@ -34,6 +34,9 @@ export class CountriesComponent implements OnInit, OnDestroy {
   public displayColumns: string[] = ['name', 'continent', 'actions'];
   public countriesTableSource = new MatTableDataSource<Country>([]);
 
+  private readonly puschService =
+    this.countryPushService.connectToPuschService();
+
   @ViewChild(MatTable) countryTable!: MatTable<Country>;
 
   constructor(
@@ -44,11 +47,11 @@ export class CountriesComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnDestroy(): void {
-    this.countryPushService.connectToPuschService().unsubscribe;
+    this.puschService.complete();
   }
 
   public ngOnInit() {
-    this.countryPushService.connectToPuschService().subscribe({
+    this.puschService.subscribe({
       next: () => {
         this.countriesTableSource = new MatTableDataSource<Country>([]);
         this.loadCountries();

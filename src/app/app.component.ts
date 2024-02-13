@@ -11,6 +11,4 @@ import { RouterOutlet } from '@angular/router';
 export class AppComponent {
   public title = 'country';
   public countriesView = true;
-
-  constructor() {}
 }
