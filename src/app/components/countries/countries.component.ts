@@ -1,11 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import {
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
@@ -30,12 +24,11 @@ import { CountryHeaderComponent } from '../country-header/county-header.componen
   ],
   templateUrl: './countries.component.html'
 })
-export class CountriesComponent implements OnInit, OnDestroy {
+export class CountriesComponent implements OnInit {
   public displayColumns: string[] = ['name', 'continent', 'actions'];
   public countriesTableSource = new MatTableDataSource<Country>([]);
 
-  private readonly puschService =
-    this.countryPushService.connectToPuschService();
+  private readonly puschService = this.countryPushService.websocketSubject;
 
   @ViewChild(MatTable) countryTable!: MatTable<Country>;
 
@@ -44,13 +37,7 @@ export class CountriesComponent implements OnInit, OnDestroy {
     private readonly countryService: CountryService,
     private readonly countryPushService: CountryPushService,
     private snackBar: MatSnackBar
-  ) {}
-
-  public ngOnDestroy(): void {
-    this.puschService.complete();
-  }
-
-  public ngOnInit() {
+  ) {
     this.puschService.subscribe({
       next: () => {
         this.countriesTableSource = new MatTableDataSource<Country>([]);
@@ -60,6 +47,9 @@ export class CountriesComponent implements OnInit, OnDestroy {
         console.error(error);
       }
     });
+  }
+
+  public ngOnInit() {
     this.loadCountries();
   }
 
@@ -81,15 +71,18 @@ export class CountriesComponent implements OnInit, OnDestroy {
   }
 
   public deleteCountry(id: number) {
-    this.countryService.deleteCountry(id).subscribe({
-      next: () => {
-        this.countriesTableSource = new MatTableDataSource<Country>([]);
-        this.loadCountries();
-        this.snackBar.open('Das Land wurde erfolgreich gelöscht', 'OK');
-      },
-      error: (error: unknown) => {
-        console.error(error);
-      }
-    });
+    const country = this.countriesTableSource.data.find(
+      (country) => country.id === id
+    );
+    if (country !== undefined) {
+      this.countryService.deleteCountry(country).subscribe({
+        next: () => {
+          this.snackBar.open('Das Land wurde erfolgreich gelöscht', 'OK');
+        },
+        error: (error: unknown) => {
+          console.error(error);
+        }
+      });
+    }
   }
 }

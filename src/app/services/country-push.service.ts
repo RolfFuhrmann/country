@@ -6,7 +6,9 @@ import { Country } from '../model/country';
   providedIn: 'root'
 })
 export class CountryPushService {
-  public connectToPuschService(): WebSocketSubject<Country> {
-    return webSocket<Country>('ws://localhost:8082/websocket');
+  public readonly websocketSubject = webSocket<Country>('ws://localhost:8082/websocket');
+
+  public getpushService(): WebSocketSubject<Country> {
+    return this.websocketSubject;
   }
 }

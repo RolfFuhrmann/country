@@ -33,9 +33,9 @@ export class CountryService {
     return this.httpClient.post<Country>(`${this.countryUrl}/add`, country);
   }
 
-  public deleteCountry(countryId: number): Observable<number> {
-    return this.httpClient.delete<number>(
-      `${this.countryUrl}/delete/` + countryId
-    );
+  public deleteCountry(country: Country): Observable<Country> {
+    return this.httpClient.delete<Country>(`${this.countryUrl}/delete`, {
+      body: country
+    });
   }
 }
